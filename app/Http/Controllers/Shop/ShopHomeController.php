@@ -8,9 +8,7 @@ use Illuminate\View\View;
 
 class ShopHomeController extends Controller
 {
-    public function __construct(private readonly ItemService $itemService)
-    {
-    }
+    public function __construct(private readonly ItemService $itemService) {}
 
     public function home(): View
     {

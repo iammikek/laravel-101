@@ -13,9 +13,7 @@ class ShopItemController extends Controller
 {
     private const PAGE_SIZE = 10;
 
-    public function __construct(private readonly ItemService $itemService)
-    {
-    }
+    public function __construct(private readonly ItemService $itemService) {}
 
     public function index(Request $request): View
     {

@@ -11,9 +11,7 @@ use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
-    public function __construct(private readonly UserService $userService)
-    {
-    }
+    public function __construct(private readonly UserService $userService) {}
 
     public function register(Request $request): JsonResponse
     {

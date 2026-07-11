@@ -11,9 +11,7 @@ use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
 {
-    public function __construct(private readonly CategoryService $categoryService)
-    {
-    }
+    public function __construct(private readonly CategoryService $categoryService) {}
 
     public function index(Request $request): JsonResponse
     {

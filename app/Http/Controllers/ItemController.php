@@ -11,9 +11,7 @@ use Illuminate\Support\Facades\Validator;
 
 class ItemController extends Controller
 {
-    public function __construct(private readonly ItemService $itemService)
-    {
-    }
+    public function __construct(private readonly ItemService $itemService) {}
 
     public function index(Request $request): JsonResponse
     {

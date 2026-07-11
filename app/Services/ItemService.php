@@ -5,16 +5,16 @@ namespace App\Services;
 use App\Exceptions\ItemNotFoundException;
 use App\Models\Item;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 
 class ItemService
 {
     public function __construct(
         private readonly CategoryService $categoryService,
-    ) {
-    }
+    ) {}
 
     /** @param array<string, mixed> $filters
-     * @return array{0: \Illuminate\Support\Collection<int, Item>, 1: int}
+     * @return array{0: Collection<int, Item>, 1: int}
      */
     public function listItems(int $skip, int $limit, array $filters = []): array
     {
@@ -139,7 +139,7 @@ class ItemService
     }
 
     /** @param Builder<Item> $query
-     * @param array<string, mixed> $filters
+     * @param  array<string, mixed>  $filters
      */
     private function applyFilters(Builder $query, array $filters): void
     {

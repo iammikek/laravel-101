@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\HealthController;
 use App\Http\Controllers\ItemController;
 use Illuminate\Support\Facades\Route;
 

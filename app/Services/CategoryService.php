@@ -7,10 +7,11 @@ use App\Exceptions\CategoryNameExistsException;
 use App\Exceptions\CategoryNotFoundException;
 use App\Models\Category;
 use App\Models\Item;
+use Illuminate\Support\Collection;
 
 class CategoryService
 {
-    /** @return array{0: \Illuminate\Support\Collection<int, Category>, 1: int} */
+    /** @return array{0: Collection<int, Category>, 1: int} */
     public function listCategories(int $skip, int $limit): array
     {
         $query = Category::query()->orderBy('id');

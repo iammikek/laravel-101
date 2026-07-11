@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Shop;
 
+use App\Exceptions\UserEmailExistsException;
 use App\Http\Controllers\Controller;
 use App\Services\UserService;
 use Illuminate\Http\RedirectResponse;
@@ -11,9 +12,7 @@ use Illuminate\View\View;
 
 class ShopAuthController extends Controller
 {
-    public function __construct(private readonly UserService $userService)
-    {
-    }
+    public function __construct(private readonly UserService $userService) {}
 
     public function login(Request $request): View|RedirectResponse
     {
@@ -62,7 +61,7 @@ class ShopAuthController extends Controller
 
             try {
                 $user = $this->userService->create($data['email'], $data['password']);
-            } catch (\App\Exceptions\UserEmailExistsException) {
+            } catch (UserEmailExistsException) {
                 return view('shop.register')
                     ->withErrors(['email' => 'An account with this email already exists.'])
                     ->withInput($request->only('email'));
