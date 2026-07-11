@@ -153,6 +153,8 @@ Full walkthrough: **[docs/frontend.md](docs/frontend.md)**
 | [nest-101](https://github.com/iammikek/nest-101) | 8006 | API-only | NestJS, TypeScript |
 | [express-101](https://github.com/iammikek/express-101) | 8007 | API-only | Express, Vitest |
 | [go-101](https://github.com/iammikek/go-101) | 8000* | API-only | Gin, GORM |
+| [fortran-101](https://github.com/iammikek/fortran-101) | 8008 | API-only | Fortran, fpm |
+| [java-101](https://github.com/iammikek/java-101) | 8009 | API-only | Spring Boot, JPA, Flyway |
 
 \* go-101 also uses port 8000 — run one backend at a time, or change port in config.
 
@@ -167,6 +169,7 @@ Full walkthrough: **[docs/frontend.md](docs/frontend.md)**
 ### Suggested pairing
 
 - **Compare PHP stacks:** [symfony-101](https://github.com/iammikek/symfony-101) (8002), laravel-101 (8003), [framework-x-101](https://github.com/iammikek/framework-x-101) (8004)
+- **From Laravel to JVM:** laravel-101 (8003) → [java-101](https://github.com/iammikek/java-101) (8009)
 - **Pair with a client:** [react-101](https://github.com/iammikek/react-101), [vue-101](https://github.com/iammikek/vue-101), or [flutter-101](https://github.com/iammikek/flutter-101)
 
 Catalogue: [automica.io/learning-101](https://automica.io/learning-101.html)
