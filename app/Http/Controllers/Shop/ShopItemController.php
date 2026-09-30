@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Shop;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Shop\ShopStoreItemRequest;
 use App\Models\Category;
 use App\Services\ItemService;
 use Illuminate\Http\RedirectResponse;
@@ -59,31 +60,27 @@ class ShopItemController extends Controller
         ]);
     }
 
-    public function create(Request $request): View|RedirectResponse
+    public function create(): View
     {
-        if ($request->isMethod('post')) {
-            $data = $request->validate([
-                'name' => ['required', 'string', 'max:255'],
-                'description' => ['nullable', 'string'],
-                'price' => ['required', 'numeric', 'gt:0'],
-                'category_id' => ['nullable', 'integer', 'exists:categories,id'],
-            ]);
-
-            $item = $this->itemService->create(
-                $data['name'],
-                $data['description'] ?? null,
-                number_format((float) $data['price'], 2, '.', ''),
-                isset($data['category_id']) ? (int) $data['category_id'] : null,
-            );
-
-            return redirect()
-                ->route('shop.items.show', $item->id)
-                ->with('success', sprintf('Created "%s".', $item->name));
-        }
-
         return view('shop.item-form', [
             'pageTitle' => 'Add item',
             'categories' => Category::query()->orderBy('name')->get(),
         ]);
+    }
+
+    public function store(ShopStoreItemRequest $request): RedirectResponse
+    {
+        $data = $request->validated();
+
+        $item = $this->itemService->create(
+            $data['name'],
+            $data['description'] ?? null,
+            number_format((float) $data['price'], 2, '.', ''),
+            isset($data['category_id']) ? (int) $data['category_id'] : null,
+        );
+
+        return redirect()
+            ->route('shop.items.show', $item->id)
+            ->with('success', sprintf('Created "%s".', $item->name));
     }
 }

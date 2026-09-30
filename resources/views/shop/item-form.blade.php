@@ -7,7 +7,7 @@
   <h1>{{ $pageTitle ?? 'Add item' }}</h1>
   <p class="muted">Session login required. Submits a normal HTML form with CSRF protection.</p>
 
-  <form method="post" action="{{ route('shop.items.create') }}">
+  <form method="post" action="{{ route('shop.items.store') }}">
     @csrf
     <div class="mb-3">
       <label for="name">Name</label>

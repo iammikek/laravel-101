@@ -10,19 +10,20 @@ A step-by-step **Laravel 13 + Eloquent** port of [fastAPI-101](https://github.co
 
 ## What's Included
 
-1. **Laravel 13** — API routes without `/api` prefix (matches symfony-101 URLs)
-2. **`User` model** — register/login/me, JWT (`php-open-source-saver/jwt-auth`)
-3. **`Category` + `Item` models** — Eloquent, migrations, service layer
-4. **Service layer** — `app/Services/` (mirrors symfony-101)
-5. **Pagination** — `{ items, total, skip, limit }`
-6. **Filtering** — `min_price`, `max_price`, `category_id`, `name_contains`
-7. **Item stats** — `GET /items/stats/summary`
-8. **JWT auth** — Bearer tokens on write endpoints
-9. **Rate limiting** — 10/min auth, 60/min writes
-10. **Catalog Shop** — Blade UI at `/shop` — **[docs/frontend.md](docs/frontend.md)**
-11. **SQLite locally** — PostgreSQL in Docker (port **8003**)
-12. **Tests** — 28 PHPUnit feature tests
-13. **CI** — GitHub Actions
+1. **Laravel 13:** API routes without `/api` prefix (matches symfony-101 URLs)
+2. **Form requests:** `app/Http/Requests/` for API and shop validation (API failures return `{ detail }`)
+3. **`User` model:** register/login/me, JWT (`php-open-source-saver/jwt-auth`)
+4. **`Category` + `Item` models:** Eloquent, migrations, service layer
+5. **Service layer:** `app/Services/` (mirrors symfony-101)
+6. **Pagination:** `{ items, total, skip, limit }`
+7. **Filtering:** `min_price`, `max_price`, `category_id`, `name_contains`
+8. **Item stats:** `GET /items/stats/summary`
+9. **JWT auth:** Bearer tokens on write endpoints
+10. **Rate limiting:** 10/min auth, 60/min writes
+11. **Catalog Shop:** Blade UI at `/shop` — **[docs/frontend.md](docs/frontend.md)**
+12. **SQLite locally:** PostgreSQL in Docker (port **8003**)
+13. **Tests:** 28 PHPUnit feature tests
+14. **CI:** GitHub Actions
 
 ---
 
@@ -68,6 +69,7 @@ laravel-101/
 ├── app/
 │   ├── Http/Controllers/       # JSON API
 │   ├── Http/Controllers/Shop/  # Blade shop (/shop)
+│   ├── Http/Requests/          # Form requests (API + shop)
 │   ├── Models/                 # User, Category, Item
 │   ├── Services/               # Business logic
 │   ├── Support/ApiSerializer.php

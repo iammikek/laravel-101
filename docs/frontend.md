@@ -12,7 +12,7 @@ This document explains how the **browser UI** at `/shop` was built — a classic
 | Auth | JWT Bearer token | Session cookie |
 | Routes | `routes/api.php` (no prefix) | `routes/web.php` + `web` middleware |
 | Views | — | Blade in `resources/views/shop/` |
-| Validation | Controller + `Validator` | Controller + `$request->validate()` |
+| Validation | Form requests (`App\Http\Requests\*`) → `{ detail }` on 422 | Form requests (`App\Http\Requests\Shop\*`) → redirect with errors |
 
 The shop calls **`ItemService` and `UserService` directly** — it does not HTTP-call `/items`. Same monolith pattern as symfony-101 and django-101.
 
@@ -21,12 +21,12 @@ The shop calls **`ItemService` and `UserService` directly** — it does not HTTP
 ## Architecture
 
 ```
-/shop/*  ──► App\Http\Controllers\Shop\*  ──► Form validation in controller
+/shop/*  ──► App\Http\Controllers\Shop\*  ──► Form requests (Shop\*)
                                               │
                                               ▼
                                         App\Services\*  ──► Eloquent models  ──► DB
 
-/items   ──► ItemController  ──► (same) App\Services\ItemService  ──► DB
+/items   ──► ItemController  ──► Form requests  ──► ItemService  ──► DB
 ```
 
 **Symfony parallel:** `/shop/*` ≈ web routes + Blade + session auth; `/items` ≈ API routes + JWT.

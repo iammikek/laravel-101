@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Shop;
 
 use App\Exceptions\UserEmailExistsException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Shop\ShopLoginRequest;
+use App\Http\Requests\Shop\ShopRegisterRequest;
 use App\Services\UserService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -14,28 +16,30 @@ class ShopAuthController extends Controller
 {
     public function __construct(private readonly UserService $userService) {}
 
-    public function login(Request $request): View|RedirectResponse
+    public function showLogin(): View|RedirectResponse
     {
         if (Auth::check()) {
             return redirect()->route('shop.home');
         }
 
-        if ($request->isMethod('post')) {
-            $credentials = $request->validate([
-                'email' => ['required', 'email'],
-                'password' => ['required'],
-            ]);
+        return view('shop.login');
+    }
 
-            if (Auth::attempt($credentials)) {
-                $request->session()->regenerate();
-
-                return redirect()->route('shop.home');
-            }
-
-            return back()->withErrors(['email' => 'Invalid credentials.'])->onlyInput('email');
+    public function login(ShopLoginRequest $request): RedirectResponse
+    {
+        if (Auth::check()) {
+            return redirect()->route('shop.home');
         }
 
-        return view('shop.login');
+        $credentials = $request->validated();
+
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+
+            return redirect()->route('shop.home');
+        }
+
+        return back()->withErrors(['email' => 'Invalid credentials.'])->onlyInput('email');
     }
 
     public function logout(Request $request): RedirectResponse
@@ -47,32 +51,34 @@ class ShopAuthController extends Controller
         return redirect()->route('shop.home');
     }
 
-    public function register(Request $request): View|RedirectResponse
+    public function showRegister(): View|RedirectResponse
     {
         if (Auth::check()) {
             return redirect()->route('shop.home');
         }
 
-        if ($request->isMethod('post')) {
-            $data = $request->validate([
-                'email' => ['required', 'email', 'max:255'],
-                'password' => ['required', 'string', 'min:8', 'confirmed'],
-            ]);
+        return view('shop.register');
+    }
 
-            try {
-                $user = $this->userService->create($data['email'], $data['password']);
-            } catch (UserEmailExistsException) {
-                return view('shop.register')
-                    ->withErrors(['email' => 'An account with this email already exists.'])
-                    ->withInput($request->only('email'));
-            }
-
-            Auth::login($user);
-            $request->session()->regenerate();
-
-            return redirect()->route('shop.home')->with('success', 'Account created. You are logged in.');
+    public function register(ShopRegisterRequest $request): View|RedirectResponse
+    {
+        if (Auth::check()) {
+            return redirect()->route('shop.home');
         }
 
-        return view('shop.register');
+        $data = $request->validated();
+
+        try {
+            $user = $this->userService->create($data['email'], $data['password']);
+        } catch (UserEmailExistsException) {
+            return view('shop.register')
+                ->withErrors(['email' => 'An account with this email already exists.'])
+                ->withInput($request->only('email'));
+        }
+
+        Auth::login($user);
+        $request->session()->regenerate();
+
+        return redirect()->route('shop.home')->with('success', 'Account created. You are logged in.');
     }
 }

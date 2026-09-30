@@ -2,34 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RegisterRequest;
 use App\Services\UserService;
 use App\Support\ApiSerializer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
     public function __construct(private readonly UserService $userService) {}
 
-    public function register(Request $request): JsonResponse
+    public function register(RegisterRequest $request): JsonResponse
     {
-        $payload = $request->json()->all();
-        if (! is_array($payload)) {
-            return response()->json(['detail' => 'Invalid JSON body'], 422);
-        }
-
-        $validator = Validator::make($payload, [
-            'email' => ['required', 'email', 'min:5', 'max:255'],
-            'password' => ['required', 'string', 'min:8', 'max:128'],
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['detail' => $validator->errors()->first()], 422);
-        }
-
-        $user = $this->userService->create($payload['email'], $payload['password']);
+        $data = $request->validated();
+        $user = $this->userService->create($data['email'], $data['password']);
 
         return response()->json(ApiSerializer::user($user), 201);
     }

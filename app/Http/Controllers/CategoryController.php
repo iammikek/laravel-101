@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
 use App\Services\CategoryService;
 use App\Support\ApiSerializer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
 {
@@ -33,21 +34,9 @@ class CategoryController extends Controller
         return response()->json(ApiSerializer::category($this->categoryService->getById($categoryId)));
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(StoreCategoryRequest $request): JsonResponse
     {
-        $payload = $this->decodeJson($request);
-        if ($payload instanceof JsonResponse) {
-            return $payload;
-        }
-
-        $validator = Validator::make($payload, [
-            'name' => ['required', 'string', 'min:1', 'max:100'],
-            'description' => ['nullable', 'string'],
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['detail' => $validator->errors()->first()], 422);
-        }
+        $payload = $request->validated();
 
         $category = $this->categoryService->create(
             $payload['name'],
@@ -57,14 +46,9 @@ class CategoryController extends Controller
         return response()->json(ApiSerializer::category($category), 201);
     }
 
-    public function update(Request $request, int $categoryId): JsonResponse
+    public function update(UpdateCategoryRequest $request, int $categoryId): JsonResponse
     {
-        $payload = $this->decodeJson($request);
-        if ($payload instanceof JsonResponse) {
-            return $payload;
-        }
-
-        $category = $this->categoryService->update($categoryId, $payload);
+        $category = $this->categoryService->update($categoryId, $request->validated());
 
         return response()->json(ApiSerializer::category($category));
     }
@@ -74,16 +58,5 @@ class CategoryController extends Controller
         $this->categoryService->delete($categoryId);
 
         return response()->noContent();
-    }
-
-    /** @return array<string, mixed>|JsonResponse */
-    private function decodeJson(Request $request): array|JsonResponse
-    {
-        $payload = $request->json()->all();
-        if (! is_array($payload)) {
-            return response()->json(['detail' => 'Invalid JSON body'], 422);
-        }
-
-        return $payload;
     }
 }
